@@ -38,8 +38,8 @@ import { Plus, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { BaseSyntheticEvent, startTransition, useState } from 'react';
 import { toast } from 'sonner';
-import { ViaCepResposta } from '../api/buscar-cep/[cep]/cep.dto';
-import { IParticipante } from '../api/cadastro/cadastro.dto';
+import { ViaCepResposta } from '../../api/buscar-cep/[cep]/cep.dto';
+import { IParticipante } from '../../api/cadastro/cadastro.dto';
 import ModalConcluido from './_components/modal-concluido';
 
 export default function Inscricao() {

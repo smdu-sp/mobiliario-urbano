@@ -47,7 +47,9 @@ export default function RootLayout({
             >
               <ObserverProvider>
                 <Navbar />
-                {children}
+                <div className="flex flex-col w-full h-full bg-[#e9edde]">
+                  {children}
+                </div>
                 <Toaster richColors />
                 <Footer />
               </ObserverProvider>

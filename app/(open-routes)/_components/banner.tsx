@@ -23,8 +23,8 @@ export default function Banner() {
                 <CarouselContent>
                     <CarouselItem key={0}>
                         <Image
-                            width={1280}
-                            height={458}
+                            width={2560}
+                            height={916}
                             src="/hero/pc/hero-b.png"
                             alt="Imagem do evento"
                             priority
@@ -32,8 +32,8 @@ export default function Banner() {
                     </CarouselItem>
                     <CarouselItem key={1}>
                         <Image
-                            width={1280}
-                            height={458}
+                            width={2560}
+                            height={916}
                             src="/hero/pc/hero-u.png"
                             alt="Imagem do evento"
                             priority
@@ -41,8 +41,8 @@ export default function Banner() {
                     </CarouselItem>
                     <CarouselItem key={2}>
                         <Image
-                            width={1280}
-                            height={458}
+                            width={2560}
+                            height={916}
                             src="/hero/pc/hero-n.png"
                             alt="Imagem do evento"
                             priority
@@ -151,7 +151,8 @@ export default function Banner() {
                     className=" intersect:motion-preset-slide-up motion-delay-400"
                 >
                     <Button
-                        className="bg-[#7874C1] px-4 py-1 text-sm font-semibold hover:bg-[#7874C1]/80 cursor-pointer"
+                        size="lg"
+                        className="px-4 py-1 text-lg font-semibold cursor-pointer"
                         diagonal
                     >
                     Inscreva-se agora

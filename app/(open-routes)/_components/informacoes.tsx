@@ -1,8 +1,8 @@
 "use client"
 
+import { Contato, Data, Programacao, Sobre } from "@/components/icones";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, Info, Phone } from "lucide-react";
 import { useState } from "react";
 
 export default function Informacoes() {
@@ -15,12 +15,12 @@ export default function Informacoes() {
         <Accordion
             type="single"
             collapsible
-            className="w-full lg:w-3xl mx-auto space-y-4"
+            className="w-[90%] lg:w-[600px] mx-auto space-y-4"
             value={value}
             onValueChange={setValue}
         >
             <div
-                className={`w-full flex flex-col gap-4 p-[2px] ${value === "item-1" ? "bg-[#D0DBBF]" : ""}`}
+                className={`w-full flex flex-col gap-4 p-[3px] ${value === "item-1" ? "bg-[#D0DBBF]" : ""}`}
                 style={{
                     clipPath:
                     "polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px)",
@@ -35,7 +35,7 @@ export default function Informacoes() {
                     } : {}}
                 >
                     <AccordionTrigger
-                        className={`py-4 px-4 flex gap-3 items-center ${value === "item-1" ? "bg-transparent" : "bg-[#D0DBBF]"}`}
+                        className={`py-2 px-4 flex gap-3 items-center ${value === "item-1" ? "bg-transparent" : "bg-[#D0DBBF]"}`}
                         style={{
                             clipPath:
                             "polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px)",
@@ -45,7 +45,7 @@ export default function Informacoes() {
                             <p className="font-semibold text-xl w-full text-start text-[#3B2D3A]">
                             Sobre
                             </p>
-                            <Info className="h-5 w-5 text-primary flex-shrink-0 col-span-0" />
+                            <Sobre />
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="pb-4 px-9">
@@ -72,7 +72,7 @@ export default function Informacoes() {
                 </AccordionItem>
             </div>
             <div
-                className={`flex flex-col gap-4 p-[2px] ${value === "item-2" ? "bg-[#D0DBBF]" : ""}`}
+                className={`flex flex-col gap-4 p-[3px] ${value === "item-2" ? "bg-[#D0DBBF]" : ""}`}
                 style={{
                     clipPath:
                     "polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px)",
@@ -87,7 +87,7 @@ export default function Informacoes() {
                     } : {}}
                 >
                     <AccordionTrigger
-                        className={`py-4 px-4 flex gap-3 items-center ${value === "item-2" ? "bg-transparent" : "bg-[#D0DBBF]"}`}
+                        className={`py-2 px-4 pl-7 flex gap-3 items-center ${value === "item-2" ? "bg-transparent" : "bg-[#D0DBBF]"}`}
                         style={{
                             clipPath:
                             "polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px)",
@@ -95,9 +95,9 @@ export default function Informacoes() {
                     >
                         <div className=" flex items-center w-full">
                             <p className="font-semibold text-xl w-full text-start text-[#3B2D3A]">
-                                Data de Inscrição
+                                Período de Inscrição
                             </p>
-                            <Calendar className="h-5 w-5 text-primary flex-shrink-0" />
+                            <Data />
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="pb-4 px-9">
@@ -117,7 +117,7 @@ export default function Informacoes() {
                 </AccordionItem>
             </div>
             <div
-                className={`flex flex-col gap-4 p-[2px] ${value === "item-3" ? "bg-[#D0DBBF]" : ""}`}
+                className={`flex flex-col gap-4 p-[3px] ${value === "item-3" ? "bg-[#D0DBBF]" : ""}`}
                 style={{
                     clipPath:
                     "polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px)",
@@ -132,7 +132,7 @@ export default function Informacoes() {
                     } : {}}
                 >
                     <AccordionTrigger
-                        className={`py-4 px-4 flex gap-3 items-center ${value === "item-3" ? "bg-transparent" : "bg-[#D0DBBF]"}`}
+                        className={`py-2 px-4 flex gap-3 items-center ${value === "item-3" ? "bg-transparent" : "bg-[#D0DBBF]"}`}
                         style={{
                             clipPath:
                             "polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px)",
@@ -142,7 +142,7 @@ export default function Informacoes() {
                             <p className="font-semibold text-xl w-full text-start text-[#3B2D3A]">
                                 Programação
                             </p>
-                            <Clock className="h-5 w-5 text-primary flex-shrink-0" />
+                            <Programacao />
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="pb-4 px-9">
@@ -227,7 +227,7 @@ export default function Informacoes() {
                 </AccordionItem>
             </div>
             <div
-                className={`flex flex-col gap-4 p-[2px] ${value === "item-4" ? "bg-[#D0DBBF]" : ""}`}
+                className={`flex flex-col gap-4 p-[3px] ${value === "item-4" ? "bg-[#D0DBBF]" : ""}`}
                 style={{
                     clipPath:
                     "polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px)",
@@ -242,7 +242,7 @@ export default function Informacoes() {
                     } : {}}
                 >
                     <AccordionTrigger
-                        className={`py-4 px-4 flex gap-3 items-center ${value === "item-4" ? "bg-transparent" : "bg-[#D0DBBF]"}`}
+                        className={`py-2 px-4 flex gap-3 items-center ${value === "item-4" ? "bg-transparent" : "bg-[#D0DBBF]"}`}
                         style={{
                             clipPath:
                             "polygon(10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px)",
@@ -252,7 +252,7 @@ export default function Informacoes() {
                             <p className="font-semibold text-xl w-full text-start text-[#3B2D3A]">
                                 Contato
                             </p>
-                            <Phone className="h-5 w-5 text-primary flex-shrink-0" />
+                            <Contato />
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="pb-4 px-9">

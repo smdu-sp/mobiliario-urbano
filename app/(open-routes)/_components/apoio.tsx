@@ -33,12 +33,6 @@ export default function Apoio() {
                   width={58}
                   height={73}
                 />
-                <Image
-                  src="/apoio/abimovel.png"
-                  alt="Logo Associação Brasileira das Indústrias do Mobiliário"
-                  width={189}
-                  height={53}
-                />
               </div>
             </div>
             <div className="flex flex-col gap-4">

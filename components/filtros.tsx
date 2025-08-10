@@ -58,7 +58,7 @@ export function Filtros({ camposFiltraveis }: FiltrosProps) {
 
 	useEffect(() => {
 		atualizaFiltros();
-	}, );
+	}, []);
 
 	useEffect(() => {
 		for (const [key, value] of searchParams) {
@@ -272,14 +272,13 @@ export function Filtros({ camposFiltraveis }: FiltrosProps) {
 						</Button>
 					</PopoverTrigger>
 					<PopoverContent className="w-auto p-0" align="start">
-					<Calendar
-						initialFocus
-						mode="range"
-						defaultMonth={date && date.from}
-						selected={date}
-						onSelect={handleSelecionaData}
-						numberOfMonths={2}
-					/>
+						<Calendar
+							mode="range"
+							defaultMonth={date && date.from}
+							selected={date}
+							onSelect={handleSelecionaData}
+							numberOfMonths={2}
+						/>
 					</PopoverContent>
 				</Popover>
 			</div>
@@ -289,7 +288,7 @@ export function Filtros({ camposFiltraveis }: FiltrosProps) {
 	return (
 		<div className='flex flex-col md:flex-row md:items-end gap-5 md:w-fit justify-start'>
 			{renderFiltros()}
-			<div className="isolate flex -space-x-px">
+			<div className="grid grid-cols-2">
 				<Button className='rounded-r-none w-full md:w-fit' disabled={isPending} onClick={() => startTransition(() => atualizaFiltros())} title='Aplicar filtros'>
 					<RefreshCw className={isPending ? 'animate-spin' : ''} />
 				</Button>

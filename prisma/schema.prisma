@@ -107,3 +107,16 @@ model Arquivo {
 
   @@map("arquivos")
 }
+
+model Duvida {
+  id            String   @id @default(uuid())
+  pergunta      String   @db.Text
+  email         String
+  nome          String
+  resposta      String?
+
+  criadoEm      DateTime @default(now())
+  atualizadoEm  DateTime @default(now()) @updatedAt
+
+  @@map("duvidas")
+}

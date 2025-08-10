@@ -16,12 +16,12 @@ export default function Destaque() {
               </p>
               <div className="flex flex-col intersect:motion-preset-slide-up motion-delay-300 sm:flex-row gap-4 justify-center">
                 <Link href={"/inscricao"}>
-                  <Button 
+                  <Button
                     size="lg"
-                    className="bg-[#7874C1] px-4 py-1 text-lg font-semibold hover:bg-[#7874C1]/80 cursor-pointer"
+                    className="px-4 py-1 text-lg font-semibold cursor-pointer"
                     diagonal
                   >
-                    Inscreva-se Agora
+                    Inscreva-se agora
                   </Button>
                 </Link>
               </div>

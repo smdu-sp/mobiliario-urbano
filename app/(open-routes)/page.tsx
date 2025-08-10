@@ -6,12 +6,10 @@ import Destaque from "./_components/destaque";
 
 export default async function Home() {
   return (
-    <div className="flex flex-col w-full h-full bg-[#e9edde]">
+    <div className="flex flex-col w-full h-full bg-[#e9edde] gap-4">
       <Banner />
-      <main id="info" className="h-full mx-auto px-4 py-10 max-w-3xl">
-        <Informacoes />
-        <Documentos />
-      </main>
+      <Informacoes />
+      <Documentos />
       <Apoio />
       <Destaque />
     </div>

@@ -36,8 +36,8 @@ import {
 import { Plus, X } from "lucide-react";
 import { BaseSyntheticEvent, startTransition, useState } from "react";
 import { toast } from "sonner";
-import { ViaCepResposta } from "../api/buscar-cep/[cep]/cep.dto";
-import { IParticipante } from "../api/cadastro/cadastro.dto";
+import { ViaCepResposta } from "../../api/buscar-cep/[cep]/cep.dto";
+import { IParticipante } from "../../api/cadastro/cadastro.dto";
 import { useRouter } from "next/navigation";
 
 export default function PreCadastroPage() {
@@ -203,35 +203,19 @@ export default function PreCadastroPage() {
   }
 
   function checkStep1() {
-    return envioUnico;
+    return !envioUnico;
   }
 
   function checkStep2() {
-    let step2 = true;
-    // Validação de nome
-    if (!nome || nome.trim() === "" || nome.length < 3) step2 = false;
-    // Validação de email
-    if (!email || email.trim() === "" || !email.includes("@")) step2 = false;
-    // Validação de telefone
-    if (!telefone || telefone.trim() === "" || telefone.length < 14)
-      step2 = false;
-    // Validação de CPF
-    if (!cpf || cpf.trim() === "" || cpf.length < 14) step2 = false;
-    // Validação de CNPJ
-    if (!cnpj || cnpj.trim() === "" || cnpj.length < 18) step2 = false;
-    // Validação de carteira
-    if (!carteira_tipo || !carteira_numero || carteira_numero.trim() === "")
-      step2 = false;
-    // Validação de senha
-    if (!senha || senha.trim() === "" || senha.length < 6) step2 = false;
-    // Validação de confirmação de senha
-    if (
-      !confirmarSenha ||
-      confirmarSenha.trim() === "" ||
-      senha !== confirmarSenha
-    )
-      step2 = false;
-    return step2;
+    if (!nome || nome.trim() === "" || nome.length < 3) return false;
+    if (!email || email.trim() === "" || !email.includes("@")) return false;
+    if (!telefone || telefone.trim() === "" || telefone.length < 14) return false;
+    if (!cpf || cpf.trim() === "" || cpf.length < 14) return false;
+    if (!cnpj || cnpj.trim() === "" || cnpj.length < 18) return false;
+    if (!carteira_tipo || !carteira_numero || carteira_numero.trim() === "") return false;
+    if (!senha || senha.trim() === "" || senha.length < 6) return false;
+    if (!confirmarSenha || confirmarSenha.trim() === "" || senha !== confirmarSenha) return false;
+    return true;
   }
 
   function checkStep3() {
@@ -281,21 +265,22 @@ export default function PreCadastroPage() {
   }
 
   function disableNextButton(): boolean | undefined {
-    if (step == 2)
-      if (senha !== confirmarSenha || senha.length === 0) {
-        return true;
-      }
-
-    return false;
+    var valido = true;
+    valido = checkStep1();
+    valido = checkStep2();
+    return valido;
   }
 
   return (
     <div className="container mx-auto h-full min-h-screen flex items-center justify-center">
-      <div className="max-w-3xl w-full mx-auto ">
+      <div className="max-w-3xl w-full mx-auto">
         <form onSubmit={handleSubmit}>
           <Stepper
             initialStep={initialStep}
-            onStepChange={(step) => setStep(step)}
+            onStepChange={(step) => {
+              console.log(step);
+              setStep(step)
+            }}
             backButtonText="Voltar"
             nextButtonText="Próximo"
             completeButtonText="Finalizar"
