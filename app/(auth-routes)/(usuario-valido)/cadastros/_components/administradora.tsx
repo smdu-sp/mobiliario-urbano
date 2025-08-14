@@ -6,6 +6,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import { ICadastro } from '../page';
 import { TipoArquivo } from '.prisma/client';
+import ModalCadastro from './modal-cadastro';
+import { Button } from '@/components/ui/button';
 
 export const administradoraColumns: ColumnDef<ICadastro>[] = [
 	{
@@ -74,18 +76,17 @@ export const administradoraColumns: ColumnDef<ICadastro>[] = [
 			);
 		},
 	},
-	// {
-	// 	accessorKey: 'status',
-	// 	header: () => <p className='text-center'>Status</p>,
-	// 	cell: ({ row }) => {
-	// 		const status = row.original.status;
-	// 		return (
-	// 			<div className='flex items-center justify-center'>
-	// 				<Badge variant={`${status == false ? 'destructive' : 'default'}`}>
-	// 					{status ? 'Ativo' : 'Inativo'}
-	// 				</Badge>
-	// 			</div>
-	// 		);
-	// 	},
-	// },
+	{
+		accessorKey: 'acoes',
+		header: "",
+		cell: ({ row }) => {
+			return (
+				<div className='flex items-center justify-end'>
+					<ModalCadastro cadastro={row.original}>
+						<Button size='sm' variant='outline'>Ver dados</Button>
+					</ModalCadastro>
+				</div>
+			);
+		},
+	},
 ];

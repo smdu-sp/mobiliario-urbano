@@ -72,7 +72,7 @@ async function buscarCadastros(
   busca?: string,
 ) {
   [pagina, limite] = verificaPagina(pagina, limite);
-  const select = ["TOTAL", "DEV"].includes(permissao) ? {
+  const select = ["ADMIN", "DEV"].includes(permissao) ? {
     id: true,
     email: true,
     nome: true,
@@ -81,6 +81,12 @@ async function buscarCadastros(
     carteira_tipo: true,
     carteira_numero: true,
     equipe: true,
+    logradouro: true,
+    numero: true,
+    complemento: true,
+    cep: true,
+    cidade: true,
+    uf: true,
     avaliacao_licitadora: {
       select: {
         id: true,

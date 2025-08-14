@@ -185,7 +185,7 @@ export default function ModalUsuario({ usuario, children }: { usuario?: Usuario,
                                             <SelectContent>
                                                 <SelectItem value={Permissao.JULGADORA}>Comissão julgadora</SelectItem>
                                                 <SelectItem value={Permissao.LICITACAO}>Comissão licitatória</SelectItem>
-                                                <SelectItem value={Permissao.TOTAL}>Administrador</SelectItem>
+                                                <SelectItem value={Permissao.ADMIN}>Administrador</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </FormControl>

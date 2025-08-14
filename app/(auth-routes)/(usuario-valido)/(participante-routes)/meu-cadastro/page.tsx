@@ -13,7 +13,7 @@ export default async function MeuCadastro() {
     return (
         <div className="container mx-auto h-full flex items-center justify-center p-4">
             <div className="max-w-3xl w-full mx-auto p-4 bg-white rounded-lg shadow-md">
-                <Accordion type="single" collapsible className="w-full">
+                <Accordion type="multiple" className="w-full">
                     <AccordionItem value="item-1">
                         <AccordionTrigger>
                             <h1 className="text-lg font-bold">Responsável</h1>

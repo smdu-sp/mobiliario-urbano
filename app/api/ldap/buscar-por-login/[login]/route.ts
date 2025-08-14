@@ -10,7 +10,7 @@ export async function PATCH(
   const { login } = await context.params;
   const session = await auth();
   if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
-  if (!await verificarPermissoes(session.user.id, ["TOTAL", "DEV"]))
+  if (!await verificarPermissoes(session.user.id, ["ADMIN", "DEV"]))
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   if (!login || login === "") return NextResponse.json({
     status: 400,

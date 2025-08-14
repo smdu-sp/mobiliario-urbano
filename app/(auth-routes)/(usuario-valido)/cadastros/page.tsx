@@ -65,7 +65,7 @@ async function Usuarios({
 }) {
     const session = await auth();
     if (!session) return redirect('/');
-    if (!await verificarPermissoes(session.user.id, ["TOTAL", "DEV", "LICITACAO", "JULGADORA"]))
+    if (!await verificarPermissoes(session.user.id, ["ADMIN", "DEV", "LICITACAO", "JULGADORA"]))
         return redirect('/');
     const permissao: Permissao | null = await retornaPermissao(session.user.id);
     if (!permissao) return redirect('/');
@@ -94,7 +94,7 @@ async function Usuarios({
 		<div className='px-0 md:px-8 relative pb-20 md:pb-14 h-full container mx-auto py-8'>
 			<h1 className='text-xl md:text-4xl font-bold'>Cadastros</h1>
 			<div className='grid grid-cols-1 gap-y-3 my-5 '>
-				{["TOTAL", "DEV"].includes(permissao) && <Filtros
+				{["ADMIN", "DEV"].includes(permissao) && <Filtros
 					camposFiltraveis={[
 						{
 							nome: 'Busca',
@@ -107,7 +107,7 @@ async function Usuarios({
 				<div className='w-full rounded-lg overflow-hidden'>
 					<DataTable
 						columns={
-                            ["TOTAL", "DEV"].includes(permissao) ? administradoraColumns :
+                            ["ADMIN", "DEV"].includes(permissao) ? administradoraColumns :
                             ["LICITACAO"].includes(permissao) ? licitadoraColumns :
                             ["JULGADORA"].includes(permissao) ? julgadoraColumns :
                             []

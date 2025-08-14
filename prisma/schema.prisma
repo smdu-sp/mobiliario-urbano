@@ -17,7 +17,7 @@ datasource db {
 enum Permissao {
   DEV
   PARTICIPANTE
-  TOTAL
+  ADMIN
   LICITACAO
   JULGADORA
 }
