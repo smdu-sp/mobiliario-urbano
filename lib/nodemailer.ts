@@ -1,9 +1,9 @@
 import nodemailer from "nodemailer";
 
-const smtpHost = process.env.MAILTRAP_SMTP_HOST;
-const smtpPort = process.env.MAILTRAP_SMTP_PORT;
-const smtpUser = process.env.MAILTRAP_SMTP_USER;
-const smtpPass = process.env.MAILTRAP_SMTP_PASS;
+const smtpHost = process.env.MAIL_HOST;
+const smtpPort = process.env.MAIL_PORT;
+const smtpUser = process.env.MAIL_USER;
+const smtpPass = process.env.MAIL_PASS;
 
 if (!smtpHost || !smtpPort || !smtpUser || !smtpPass) {
   throw new Error(
@@ -14,6 +14,7 @@ if (!smtpHost || !smtpPort || !smtpUser || !smtpPass) {
 export const transporter = nodemailer.createTransport({
   host: smtpHost,
   port: Number(smtpPort),
+  secure: true,
   auth: {
     user: smtpUser,
     pass: smtpPass,
