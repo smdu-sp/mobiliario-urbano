@@ -98,3 +98,7 @@ export function verificaLimite(pagina: number, limite: number, total: number) {
   if ((pagina - 1) * limite >= total) pagina = Math.ceil(total / limite);
   return [pagina, limite];
 }
+
+export function gerarSenha(tamanho: number = 10) {
+  return Math.random().toString(36).slice(tamanho * -1);
+}

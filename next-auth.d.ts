@@ -11,6 +11,7 @@ declare module 'next-auth' {
             nome: string
             login?: string
             permissao: Permissao
+            alterarSenha: boolean
         }
     }
 
@@ -20,6 +21,7 @@ declare module 'next-auth' {
         nome: string
         login?: string
         permissao: Permissao
+        alterarSenha: boolean
     }
 }
 
@@ -30,5 +32,6 @@ declare module 'next-auth/jwt' {
         nome: string
         login?: string
         permissao: Permissao
+        alterarSenha: boolean
     }
 }

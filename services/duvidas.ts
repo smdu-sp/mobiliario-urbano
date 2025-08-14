@@ -14,6 +14,7 @@ async function responderDuvida(id: string, resposta: string) {
         where: { id },
         data: { resposta },
     });
+    if (!respondida) throw new Error("Erro ao responder pergunta");
     return respondida;
 }
 

@@ -28,17 +28,20 @@ enum Tipo_Usuario {
 }
 
 model Usuario {
-  id        String       @id @default(uuid())
-  nome      String
-  email     String       @unique
-  login     String?      @unique
-  permissao Permissao
-  senha     String?
-  tipo      Tipo_Usuario @default(INTERNO)
-  status    Boolean      @default(true)
+  id            String       @id @default(uuid())
+  nome          String
+  email         String       @unique
+  login         String?      @unique
+  permissao     Permissao
+  senha         String?
+  tipo          Tipo_Usuario @default(INTERNO)
+  status        Boolean      @default(true)
+  alterarSenha  Boolean      @default(false)
 
-  criadoEm     DateTime @default(now())
-  atualizadoEm DateTime @default(now())
+  criadoEm      DateTime     @default(now())
+  atualizadoEm  DateTime     @default(now()) @updatedAt
+
+  cadastro      Cadastro?
 
   @@map("usuarios")
 }
@@ -65,12 +68,14 @@ model Cadastro {
   carteira_tipo   Tipo_Carteira @default(CAU)
   carteira_numero String
   equipe          Boolean       @default(false)
+  usuarioId       String        @unique
 
   criadoEm     DateTime @default(now())
   atualizadoEm DateTime @default(now()) @updatedAt
 
   arquivos      Arquivo[]
   participantes Participante[]
+  usuario       Usuario      @relation(fields: [usuarioId], references: [id])
 
   @@map("cadastros")
 }

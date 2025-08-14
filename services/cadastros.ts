@@ -1,10 +1,10 @@
 /** @format */
 
 import { Permissao, Prisma, Tipo_Usuario } from ".prisma/client";
-import { create as CreteCadastro } from "@/app/api/cadastro/cadastro.dto";
 import { db } from "@/lib/prisma";
-import fs from "fs";
 import { PreCadastro } from "@/app/api/pre-cadastro/pre-cadastro.dto";
+import bcrypt from "bcryptjs";
+import { verificaLimite, verificaPagina } from "@/lib/utils";
 
 function geraProtocolo(id: number) {
   const mascara = 17529 * id ** 2 + 85474;
@@ -14,77 +14,6 @@ function geraProtocolo(id: number) {
   return `MOB-2025-${protocolo.padStart(10, "0")}`;
 }
 
-async function criarCadastro(cadastro: CreteCadastro): Promise<string | null> {
-  const protocolo = await db.$transaction(
-    async (tx) => {
-      const { doc_especifica, projetos, participantes, ...data } = cadastro;
-      const novo_cadastro = await tx.cadastro.create({ data });
-      const protocolo = geraProtocolo(+novo_cadastro.id);
-      try {
-        console.log(cadastro.equipe, participantes);
-        if (doc_especifica.length > 0)
-          doc_especifica.map(async (file, index) => {
-            const ext = file.name.split(".").pop();
-            const data = await file.arrayBuffer();
-            const pasta = `./uploads/${novo_cadastro.id}/doc_especifica`;
-            if (!fs.existsSync(pasta))
-              fs.mkdirSync(`./uploads/${novo_cadastro.id}/doc_especifica`, {
-                recursive: true,
-              });
-            const caminho = `${pasta}/${index + 1}.${ext}`;
-            fs.writeFileSync(caminho, Buffer.from(data));
-            await tx.arquivo.create({
-              data: {
-                caminho,
-                cadastroId: novo_cadastro.id,
-                tipo: "DOC_ESPECIFICA",
-              },
-            });
-          });
-        if (projetos.length > 0)
-          projetos.map(async (file, index) => {
-            const ext = file.name.split(".").pop();
-            const data = await file.arrayBuffer();
-            const pasta = `./uploads/${novo_cadastro.id}/projetos`;
-            if (!fs.existsSync(pasta))
-              fs.mkdirSync(`./uploads/${novo_cadastro.id}/projetos`, {
-                recursive: true,
-              });
-            const caminho = `${pasta}/${index + 1}.${ext}`;
-            fs.writeFileSync(caminho, Buffer.from(data));
-            await tx.arquivo.create({
-              data: { caminho, cadastroId: novo_cadastro.id, tipo: "PROJETOS" },
-            });
-          });
-        if (cadastro.equipe && participantes && participantes.length > 0)
-          console.log(
-            await tx.participante.createMany({
-              data: participantes.map((participante) => ({
-                ...participante,
-                cadastroId: novo_cadastro.id,
-              })),
-            })
-          );
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {
-        tx.cadastro.delete({ where: { id: novo_cadastro.id } });
-        return null;
-      }
-      await tx.cadastro.update({
-        where: { id: novo_cadastro.id },
-        data: { protocolo },
-      });
-      return protocolo;
-    },
-    {
-      maxWait: 20000,
-      timeout: 60000,
-    }
-  );
-  if (!protocolo) return null;
-  return protocolo;
-}
-
 async function criarPreCadastro(
   preCadastro: PreCadastro
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,19 +21,17 @@ async function criarPreCadastro(
   const preCadastroSaved = await db.$transaction(
     async (tx: Prisma.TransactionClient) => {
       const { participantes, senha, ...data } = preCadastro;
-      const [novo_usuario, novo_cadastro] = await Promise.all([
-        tx.usuario.create({
-          data: {
-            nome: data.nome,
-            email: data.email,
-            senha,
-            tipo: Tipo_Usuario.EXTERNO,
-            permissao: Permissao.PARTICIPANTE,
-          },
-        }),
-        tx.cadastro.create({ data }),
-      ]);
-      console.log(novo_usuario);
+      const senhaHashed = await bcrypt.hash(senha, 10);
+      const novo_usuario = await tx.usuario.create({
+        data: {
+          nome: data.nome,
+          email: data.email,
+          senha: senhaHashed,
+          tipo: Tipo_Usuario.EXTERNO,
+          permissao: Permissao.PARTICIPANTE,
+        },
+      });
+      const novo_cadastro = await tx.cadastro.create({ data: { ...data, usuarioId: novo_usuario.id } });
       try {
         if (preCadastro.equipe && participantes && participantes.length > 0)
           console.log(
@@ -119,6 +46,7 @@ async function criarPreCadastro(
         return novo_cadastro;
       } catch (error) {
         tx.cadastro.delete({ where: { id: novo_cadastro.id } });
+        tx.usuario.delete({ where: { id: novo_usuario.id } });
         return error;
       }
     },
@@ -131,4 +59,40 @@ async function criarPreCadastro(
   return preCadastroSaved;
 }
 
-export { criarCadastro, geraProtocolo, criarPreCadastro };
+async function meuCadastro(id: string) {
+  const cadastro = await db.cadastro.findUnique({ where: { usuarioId: id }, include: { participantes: true } });
+  return cadastro;
+}
+
+async function buscarCadastros(
+  pagina: number = 1,
+  limite: number = 10,
+  busca?: string,
+) {
+  [pagina, limite] = verificaPagina(pagina, limite);
+  const searchParams = {
+      ...(busca && {
+          OR: [
+              { nome: { contains: busca } },
+              { email: { contains: busca } },
+          ],
+      }),
+  };
+  const total = await db.cadastro.count({ where: searchParams });
+  if (total == 0) return { total: 0, pagina: 0, limite: 0, users: [] };
+  [pagina, limite] = verificaLimite(pagina, limite, total);
+  const usuarios = await db.cadastro.findMany({
+      where: searchParams,
+      orderBy: { criadoEm: 'asc' },
+      skip: (pagina - 1) * limite,
+      take: limite,
+  });
+  return {
+      total: +total,
+      pagina: +pagina,
+      limite: +limite,
+      data: usuarios,
+  };
+}
+
+export { geraProtocolo, criarPreCadastro, meuCadastro, buscarCadastros };

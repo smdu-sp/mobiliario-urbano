@@ -12,8 +12,6 @@ import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 import { toast } from 'sonner';
 
-import logo from '@/public/logo.png';
-
 export function LoginForm({
 	className,
 	...props
@@ -34,7 +32,7 @@ export function LoginForm({
 			if (res.error) toast.error('Credenciais incorretas!');
 			else {
 				toast.success('Seja bem-vindo!');
-				router.push('/cadastros');
+				router.push('/');
 			}
 		} catch (error) {
 			console.log(error);
@@ -47,7 +45,7 @@ export function LoginForm({
 			{...props}>
 			<div className='-translate-y-14'>
 				<Image
-					src={logo.src}
+					src="/logo-header.png"
 					alt='SPUrbanismo'
 					width={602}
 					height={200}

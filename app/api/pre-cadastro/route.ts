@@ -3,10 +3,14 @@
 // app/api/upload/route.ts
 import { criarPreCadastro } from "@/services/cadastros";
 import { NextRequest, NextResponse } from "next/server";
-import { IParticipante } from "../cadastro/cadastro.dto";
 import { transporter } from "@/lib/nodemailer";
 import { templateEmail } from "./_utils/template-email";
 import bcrypt from "bcryptjs";
+
+export interface IParticipante {
+    nome: string
+    documento: string
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,12 +35,10 @@ export async function POST(req: NextRequest) {
     const participantes: IParticipante[] = JSON.parse(participantesTexto);
     const equipe: boolean = formData.get("equipe") === "true";
 
-    const senhaHashed = await hashSenha(senha);
-
     const cadastro = await criarPreCadastro({
       equipe,
       nome,
-      senha: senhaHashed,
+      senha,
       email,
       telefone,
       cpf,
@@ -60,7 +62,6 @@ export async function POST(req: NextRequest) {
     }
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM,
       to: email,
       subject: "Pre cadastro realizado!",
       text: "Espera as próximas etapas",
@@ -78,17 +79,5 @@ export async function POST(req: NextRequest) {
       { message: "Falha ao enviar cadastro", error: error.message },
       { status: 500 }
     );
-  }
-}
-
-async function hashSenha(password: string): Promise<string> {
-  try {
-    const salt = await bcrypt.genSalt(parseInt(process.env.SALT_ROUNDS! ?? 8));
-    const hash = await bcrypt.hash(password, salt);
-
-    return hash;
-  } catch (error) {
-    console.error("Erro ao gerar o hash:", error);
-    throw new Error("Erro ao gerar o hash da senha.");
   }
 }

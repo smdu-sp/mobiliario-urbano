@@ -27,10 +27,6 @@ export default async function Navbar() {
           <a href="#docs" className="text-sm hover:underline">
             Documentos
           </a>
-
-          <a href="#contact" className="text-sm hover:underline">
-            Contato
-          </a>
         </nav>
         <div className="flex items-center gap-5 w-[120px]">
         </div>

@@ -15,7 +15,7 @@ async function bind(login: string, senha: string) {
 		]
 	}});
 	if (!usuario || usuario.status === false) return null;
-	if (process.env.ENVIRONMENT == 'local') return usuario;
+	if (process.env.ENVIRONMENT == 'local' && usuario.tipo === 'INTERNO') return usuario;
 	if (usuario.tipo === 'INTERNO') {
 		await new Promise<void>((resolve) => {
 			ldap.bind(`${login}${process.env.LDAP_DOMAIN}`, senha, (err: any) => {

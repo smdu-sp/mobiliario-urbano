@@ -23,6 +23,7 @@ export const authConfig = {
 					nome: usuario.nome,
 					login: usuario.login || undefined,
 					permissao: usuario.permissao,
+					alterarSenha: usuario.alterarSenha,
 				};
 			},
 		}),
@@ -37,6 +38,7 @@ export const authConfig = {
 				token.nome = user.nome;
 				token.login = user.login;
 				token.permissao = user.permissao;
+				token.alterarSenha = user.alterarSenha;
 			}
 			return token;
 		},
@@ -48,6 +50,7 @@ export const authConfig = {
 			session.user.nome = token.nome;
 			session.user.login = token.login;
 			session.user.permissao = token.permissao;
+			session.user.alterarSenha = token.alterarSenha;
 			return session;
 		},
 	},

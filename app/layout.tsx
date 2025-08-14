@@ -6,18 +6,8 @@ import { QueryProvider } from "@/providers/QueryProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 import ObserverProvider from "@/providers/ObserverProvider";
 import { Manrope } from "next/font/google";
-
-// import localFont from 'next/font/local';
-// import './globals.css';
-
-// const myFont = localFont({
-// 	src: './Sora-VariableFont_wght.woff2',
-// 	display: 'swap',
-// });
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -37,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={`antialiased ${manrope.variable} bg-[#A5942B]`}>
+      <body className={`antialiased ${manrope.variable}`}>
         <AuthProvider>
           <QueryProvider>
             <ThemeProvider
@@ -46,12 +36,8 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <ObserverProvider>
-                <Navbar />
-                <div className="flex flex-col w-full h-full bg-[#e9edde]">
-                  {children}
-                </div>
+                {children}
                 <Toaster richColors />
-                <Footer />
               </ObserverProvider>
             </ThemeProvider>
           </QueryProvider>
