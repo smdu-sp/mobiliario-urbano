@@ -36,13 +36,15 @@ import {
 import { Plus, X } from "lucide-react";
 import { BaseSyntheticEvent, startTransition, useState } from "react";
 import { toast } from "sonner";
-import { ViaCepResposta } from "../../../api/buscar-cep/[cep]/cep.dto";
-import { IParticipante } from "../../../api/cadastro/cadastro.dto";
+import { ViaCepResposta } from "@/app/api/buscar-cep/[cep]/cep.dto";
+import { IParticipante } from "@/app/api/cadastro/cadastro.dto";
 import { useRouter } from "next/navigation";
 
 export default function PreCadastroPage() {
   const initialStep = 1;
   // const [open, setOpen] = useState(false);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [step, setStep] = useState(initialStep);
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
@@ -157,7 +159,7 @@ export default function PreCadastroPage() {
     formData.append("participantes", JSON.stringify(participantes));
     startTransition(async () => {
       const res = await fetch(
-        `/api/pre-cadastro`,
+        `/api/cadastro`,
         {
           method: "POST",
           body: formData,
@@ -188,7 +190,8 @@ export default function PreCadastroPage() {
       }
     }
   }
-
+  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function stepCompleted() {
     if (checkStep1() && checkStep2() && checkStep3()) {
       return true;
@@ -258,8 +261,9 @@ export default function PreCadastroPage() {
     setParticipantes(newParticipantes);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function disableNextButton(): boolean | undefined {
-    var valido = true;
+    let valido = true;
     valido = checkStep1();
     valido = checkStep2();
     return valido;

@@ -1,4 +1,3 @@
-import ModalPergunta from "@/components/modal-pergunta";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -20,7 +19,6 @@ export default function Destaque() {
                   <Button
                     size="lg"
                     className="px-4 py-1 text-lg font-semibold cursor-pointer"
-                    diagonal
                   >
                     Inscreva-se agora
                   </Button>

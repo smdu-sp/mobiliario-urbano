@@ -32,7 +32,6 @@ export default function Documentos() {
                         <Button
                             size="lg"
                             className="px-4 py-1 text-lg font-semibold cursor-pointer"
-                            diagonal
                         >
                             Baixar edital
                         </Button>
@@ -70,7 +69,6 @@ export default function Documentos() {
                         <Button
                             size="lg"
                             className="px-4 py-1 text-lg font-semibold cursor-pointer"
-                            diagonal
                         >
                             Baixar termo
                         </Button>
@@ -109,7 +107,6 @@ export default function Documentos() {
                             <Button
                                 size="lg"
                                 className="px-4 py-1 text-lg font-semibold cursor-pointer"
-                                diagonal
                             >
                                 Enviar pergunta
                             </Button>

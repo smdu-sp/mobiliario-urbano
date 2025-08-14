@@ -149,7 +149,6 @@ export default function Banner() {
                     <Button
                         size="lg"
                         className="px-4 py-1 text-lg font-semibold cursor-pointer"
-                        diagonal
                     >
                         Inscreva-se agora
                     </Button>

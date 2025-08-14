@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Usuario } from ".prisma/client";
-import { atualizarUsuario } from "@/services/usuarios";
+import { atualizarUsuario, verificarPermissoes } from "@/services/usuarios";
+import { auth } from "@/auth";
 
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
-    const { id } = params;
+    const session = await auth();
+    if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+    if (!await verificarPermissoes(session.user.id, ["TOTAL", "DEV"]))
+        return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+    const { id } = await context.params;
     const data: Partial<Usuario> = await request.json();
     try {
         const duvida = await atualizarUsuario(id, data);

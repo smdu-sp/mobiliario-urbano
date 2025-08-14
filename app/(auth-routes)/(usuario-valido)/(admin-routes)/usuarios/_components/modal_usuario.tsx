@@ -35,36 +35,38 @@ export default function ModalUsuario({ usuario, children }: { usuario?: Usuario,
 		},
 	});
 
-    const buscarUsuario = async (login: string) => {
-        const response = await fetch(`/api/usuario/buscar-novo/${login}`);
-        const data: { nome: string, email: string, login: string } = await response.json();
-        return data;
-    }
+    // const buscarUsuario = async (login: string) => {
+    //     const response = await fetch(`/api/usuario/buscar-novo/${login}`);
+    //     const data: { nome: string, email: string, login: string } = await response.json();
+    //     return data;
+    // }
 
     const onSubmit = async (data: z.input<typeof schemaUsuario>) => {
-        if (usuario) {
-            const response = await fetch(`/api/usuario/${usuario.id}`, {
-                method: 'PATCH',
-                body: JSON.stringify({ permissao: data.permissao }),
-            });
-            if (response.ok) {
-                toast.success('Usuário atualizado com sucesso');
-                setOpen(false);
+        startTransition(async () => {
+            if (usuario) {
+                const response = await fetch(`/api/usuario/${usuario.id}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ permissao: data.permissao }),
+                });
+                if (response.ok) {
+                    toast.success('Usuário atualizado com sucesso');
+                    setOpen(false);
+                } else {
+                    toast.error('Erro ao atualizar usuário');
+                }
             } else {
-                toast.error('Erro ao atualizar usuário');
+                const response = await fetch('/api/usuario', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                });
+                if (response.ok) {
+                    toast.success('Usuário criado com sucesso');
+                    setOpen(false);
+                } else {
+                    toast.error('Erro ao criar usuário');
+                }
             }
-        } else {
-            const response = await fetch('/api/usuario', {
-                method: 'POST',
-                body: JSON.stringify(data),
-            });
-            if (response.ok) {
-                toast.success('Usuário criado com sucesso');
-                setOpen(false);
-            } else {
-                toast.error('Erro ao criar usuário');
-            }
-        }
+        });
     }
     return <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
@@ -74,6 +76,9 @@ export default function ModalUsuario({ usuario, children }: { usuario?: Usuario,
             <DialogHeader>
                 <DialogTitle>{usuario ? usuario.nome : 'Novo usuário'}</DialogTitle>
             </DialogHeader>
+            <DialogDescription>
+                {usuario ? 'Atualize os dados do usuário' : 'Crie um novo usuário'}
+            </DialogDescription>
             <div className="grid gap-1 mt-4">
                 <Form {...formUsuario}>
                     <form onSubmit={formUsuario.handleSubmit(onSubmit)} className="flex flex-col gap-4">

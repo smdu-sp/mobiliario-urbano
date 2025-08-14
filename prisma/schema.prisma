@@ -28,22 +28,24 @@ enum Tipo_Usuario {
 }
 
 model Usuario {
-  id            String       @id @default(uuid())
-  nome          String
-  email         String       @unique
-  login         String?      @unique
-  permissao     Permissao
-  senha         String?
-  tipo          Tipo_Usuario @default(INTERNO)
-  status        Boolean      @default(true)
-  alterarSenha  Boolean      @default(false)
+  id                        String       @id @default(uuid())
+  nome                      String
+  email                     String       @unique
+  login                     String?      @unique
+  permissao                 Permissao
+  senha                     String?
+  tipo                      Tipo_Usuario @default(INTERNO)
+  status                    Boolean      @default(true)
+  alterarSenha              Boolean      @default(false)
 
-  criadoEm      DateTime     @default(now())
-  atualizadoEm  DateTime     @default(now()) @updatedAt
+  criadoEm                  DateTime     @default(now())
+  atualizadoEm              DateTime     @default(now()) @updatedAt
 
-  cadastro      Cadastro?
+  cadastro                  Cadastro?
+  avaliacoes_licitadoras    Avaliacao_Licitadora[]
 
   @@map("usuarios")
+  Avaliacao_Julgadora Avaliacao_Julgadora[]
 }
 
 enum Tipo_Carteira {
@@ -73,9 +75,11 @@ model Cadastro {
   criadoEm     DateTime @default(now())
   atualizadoEm DateTime @default(now()) @updatedAt
 
-  arquivos      Arquivo[]
-  participantes Participante[]
-  usuario       Usuario      @relation(fields: [usuarioId], references: [id])
+  arquivos              Arquivo[]
+  participantes         Participante[]
+  usuario               Usuario      @relation(fields: [usuarioId], references: [id])
+  avaliacao_licitadora  Avaliacao_Licitadora?
+  avaliacoes_julgadora  Avaliacao_Julgadora[]
 
   @@map("cadastros")
 }
@@ -97,6 +101,41 @@ model Participante {
 enum TipoArquivo {
   DOC_ESPECIFICA
   PROJETOS
+}
+
+model Avaliacao_Licitadora {
+  id          String      @id @default(uuid())
+  cadastroId  Int         @unique
+  avaliadorId String
+  parecer     String?
+  aprovado    Boolean     @default(false)
+  observacoes String?
+
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @default(now()) @updatedAt
+
+  cadastro Cadastro @relation(fields: [cadastroId], references: [id])
+  avaliador Usuario @relation(fields: [avaliadorId], references: [id])
+
+  @@map("avaliacoes_licitadoras")
+}
+
+model Avaliacao_Julgadora {
+  id          String      @id @default(uuid())
+  cadastroId  Int
+  avaliadorId String
+  parecer     String?
+  aprovado    Boolean     @default(false)
+  observacoes String?
+
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @default(now()) @updatedAt
+
+  cadastro Cadastro @relation(fields: [cadastroId], references: [id])
+  avaliador Usuario @relation(fields: [avaliadorId], references: [id])
+
+  @@unique([cadastroId, avaliadorId])
+  @@map("avaliacoes_julgadoras")
 }
 
 model Arquivo {

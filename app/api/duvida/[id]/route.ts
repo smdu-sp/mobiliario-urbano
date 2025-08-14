@@ -1,11 +1,17 @@
+import { auth } from "@/auth";
 import { responderDuvida } from "@/services/duvidas";
+import { verificarPermissoes } from "@/services/usuarios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
-    const { id } = params;
+    const session = await auth();
+    if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+    if (!await verificarPermissoes(session.user.id, ["TOTAL", "DEV"]))
+        return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+    const { id } = await context.params;
     const { resposta } = await request.json();
     try {
         const duvida = await responderDuvida(id, resposta);

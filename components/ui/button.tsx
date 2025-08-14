@@ -39,13 +39,11 @@ function Button({
   className,
   variant,
   size,
-  diagonal = false,
   asChild = false,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-    asChild?: boolean,
-    diagonal?: boolean
+    asChild?: boolean
   }) {
   const Comp = asChild ? Slot : "button"
 

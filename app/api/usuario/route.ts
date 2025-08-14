@@ -1,13 +1,13 @@
 import { auth } from "@/auth";
-import { criarUsuario } from "@/services/usuarios";
+import { criarUsuario, verificarPermissoes } from "@/services/usuarios";
 import { ICreateUsuario } from "@/types/usuario";
 import { NextRequest, NextResponse } from "next/server";
-import { Permissao } from ".prisma/client";
 
 export async function POST(request: NextRequest) {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
-    if (session.user.permissao !== "TOTAL") return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+    if (!await verificarPermissoes(session.user.id, ["TOTAL", "DEV"]))
+        return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     const data: ICreateUsuario = await request.json();
     try {
         const usuario = await criarUsuario(data);

@@ -58,6 +58,7 @@ export function Filtros({ camposFiltraveis }: FiltrosProps) {
 
 	useEffect(() => {
 		atualizaFiltros();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {

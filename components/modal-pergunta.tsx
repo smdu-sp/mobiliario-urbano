@@ -40,29 +40,31 @@ export default function ModalPergunta({ duvida, children }: { duvida?: Duvida, c
 		},
 	});
     const onSubmit = async (data: z.input<typeof schemaResposta | typeof schemaPergunta>) => {
-        if (duvida) {
-            const response = await fetch(`/api/duvida/${duvida.id}`, {
-                method: 'PATCH',
-                body: JSON.stringify(data),
-            });
-            if (response.ok) {
-                toast.success('Pergunta respondida com sucesso');
-                setOpen(false);
+        startTransition(async () => {
+            if (duvida) {
+                const response = await fetch(`/api/duvida/${duvida.id}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify(data),
+                });
+                if (response.ok) {
+                    toast.success('Pergunta respondida com sucesso');
+                    setOpen(false);
+                } else {
+                    toast.error('Erro ao responder pergunta');
+                }
             } else {
-                toast.error('Erro ao responder pergunta');
+                const response = await fetch('/api/duvida', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                });
+                if (response.ok) {
+                    toast.success('Pergunta enviada com sucesso');
+                    setOpen(false);
+                } else {
+                    toast.error('Erro ao enviar pergunta');
+                }
             }
-        } else {
-            const response = await fetch('/api/duvida', {
-                method: 'POST',
-                body: JSON.stringify(data),
-            });
-            if (response.ok) {
-                toast.success('Pergunta enviada com sucesso');
-                setOpen(false);
-            } else {
-                toast.error('Erro ao enviar pergunta');
-            }
-        }
+        });
     }
     return <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
@@ -74,6 +76,9 @@ export default function ModalPergunta({ duvida, children }: { duvida?: Duvida, c
             <DialogHeader>
                 <DialogTitle>Pergunta</DialogTitle>
             </DialogHeader>
+            <DialogDescription>
+                {duvida ? 'Responda a pergunta' : 'Faça uma pergunta'}
+            </DialogDescription>
             <div className="grid gap-1">
                 {duvida ? <Form {...formResposta}>
                         <form onSubmit={formResposta.handleSubmit(onSubmit)} className="flex flex-col gap-4">

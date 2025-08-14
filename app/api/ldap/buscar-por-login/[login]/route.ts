@@ -1,11 +1,17 @@
+import { auth } from "@/auth";
 import { buscarPorLogin } from "@/services/ldap";
-import { NextResponse } from "next/server";
+import { verificarPermissoes } from "@/services/usuarios";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  _: Request,
-  { params }: { params: Promise<{ login: string }> }
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ login: string }> }
 ) {
-  const { login } = await params
+  const { login } = await context.params;
+  const session = await auth();
+  if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  if (!await verificarPermissoes(session.user.id, ["TOTAL", "DEV"]))
+      return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   if (!login || login === "") return NextResponse.json({
     status: 400,
     error: "Login é obrigatório!"

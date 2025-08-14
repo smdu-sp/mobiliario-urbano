@@ -76,6 +76,12 @@ export async function verificarPermissoes(id: string, permissoes: string[] = [])
     return false;
 }
 
+export async function retornaPermissao(id: string) {
+    const usuario = await db.usuario.findUnique({ where: { id } });
+    if (!usuario) return null;
+    return usuario.permissao;
+}
+
 export async function validaSenha(id: string) {
     const usuario = await db.usuario.findUnique({ where: { id } });
     if (!usuario || usuario.alterarSenha) return false;

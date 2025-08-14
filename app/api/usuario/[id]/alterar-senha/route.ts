@@ -4,11 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await context.params;
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
-    const { id } = params;
     if (session.user.id !== id) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     const data: { senha: string, confirmarSenha: string } = await request.json();
     try {

@@ -1,10 +1,11 @@
 /** @format */
 
-import { Permissao, Prisma, Tipo_Usuario } from ".prisma/client";
+import { Permissao, Prisma, TipoArquivo, Tipo_Usuario } from ".prisma/client";
 import { db } from "@/lib/prisma";
-import { PreCadastro } from "@/app/api/pre-cadastro/pre-cadastro.dto";
+import { PreCadastro } from "@/app/api/cadastro/pre-cadastro.dto";
 import bcrypt from "bcryptjs";
 import { verificaLimite, verificaPagina } from "@/lib/utils";
+import { IAvaliacaoLicitadora } from "@/app/api/cadastro/[id]/avaliacao-licitadora/route";
 
 function geraProtocolo(id: number) {
   const mascara = 17529 * id ** 2 + 85474;
@@ -65,24 +66,89 @@ async function meuCadastro(id: string) {
 }
 
 async function buscarCadastros(
+  permissao: Permissao,
   pagina: number = 1,
   limite: number = 10,
   busca?: string,
 ) {
   [pagina, limite] = verificaPagina(pagina, limite);
+  const select = ["TOTAL", "DEV"].includes(permissao) ? {
+    id: true,
+    email: true,
+    nome: true,
+    cnpj: true,
+    cpf: true,
+    carteira_tipo: true,
+    carteira_numero: true,
+    equipe: true,
+    avaliacao_licitadora: {
+      select: {
+        id: true,
+        parecer: true,
+        aprovado: true,
+        observacoes: true,
+      }
+    },
+    participantes: {
+      select: {
+        id: true,
+        nome: true,
+        documento: true,
+      }
+    },
+    arquivos: {
+      select: {
+        id: true,
+        caminho: true,
+      }
+    }
+  } : ["LICITACAO"].includes(permissao) ? {
+    id: true,
+    avaliacao_licitadora: {
+      select: {
+        id: true,
+        parecer: true,
+        aprovado: true,
+        observacoes: true,
+      }
+    },
+    arquivos: {
+      where: {
+        tipo: TipoArquivo.PROJETOS,
+      },
+      select: {
+        id: true,
+        caminho: true,
+      }
+    }
+  } : ["JULGADORA"].includes(permissao)	?  {
+    id: true,
+    arquivos: {
+      where: {
+        tipo: TipoArquivo.DOC_ESPECIFICA,
+      },
+      select: {
+        id: true,
+        caminho: true,
+      }
+    }
+  }: { id: true };
   const searchParams = {
-      ...(busca && {
-          OR: [
-              { nome: { contains: busca } },
-              { email: { contains: busca } },
-          ],
-      }),
+    ...(busca && {
+        OR: [
+            { nome: { contains: busca } },
+            { email: { contains: busca } },
+            { cnpj: { contains: busca } },
+            { cpf: { contains: busca } },
+        ],
+    }),
   };
   const total = await db.cadastro.count({ where: searchParams });
   if (total == 0) return { total: 0, pagina: 0, limite: 0, users: [] };
   [pagina, limite] = verificaLimite(pagina, limite, total);
   const usuarios = await db.cadastro.findMany({
       where: searchParams,
+      select,
       orderBy: { criadoEm: 'asc' },
       skip: (pagina - 1) * limite,
       take: limite,
@@ -95,4 +161,23 @@ async function buscarCadastros(
   };
 }
 
-export { geraProtocolo, criarPreCadastro, meuCadastro, buscarCadastros };
+async function criarAvaliacaoLicitadora(id: number, avaliadorId: string, data: IAvaliacaoLicitadora) {
+  const avaliacao_licitadora = await db.avaliacao_Licitadora.create({
+    data: {
+      ...data,
+      cadastroId: id,
+      avaliadorId,
+    },
+  });
+  return avaliacao_licitadora;
+}
+
+async function atualizarAvaliacaoLicitadora(id: string, avaliadorId: string, data: IAvaliacaoLicitadora) {
+  const avaliacao_licitadora = await db.avaliacao_Licitadora.update({
+    where: { id },
+    data: { ...data, avaliadorId },
+  });
+  return avaliacao_licitadora;
+}
+
+export { geraProtocolo, criarPreCadastro, meuCadastro, buscarCadastros, criarAvaliacaoLicitadora, atualizarAvaliacaoLicitadora };

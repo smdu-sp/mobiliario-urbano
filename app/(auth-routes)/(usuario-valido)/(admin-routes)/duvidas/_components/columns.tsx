@@ -44,7 +44,6 @@ export const columns: ColumnDef<Duvida>[] = [
 		accessorKey: 'actions',
 		header: () => <p className='text-center'>Ações</p>,
 		cell: ({ row }) => {
-			const respondida = row.original.resposta && row.original.resposta.length > 0;
 			return (
 				<div
 					className='flex gap-2 items-center justify-center'

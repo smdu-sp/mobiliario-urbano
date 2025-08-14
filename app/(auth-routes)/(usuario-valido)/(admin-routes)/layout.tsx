@@ -1,6 +1,4 @@
 import { auth } from "@/auth";
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
 import { verificarPermissoes } from "@/services/usuarios";
 import { redirect } from "next/navigation";
 

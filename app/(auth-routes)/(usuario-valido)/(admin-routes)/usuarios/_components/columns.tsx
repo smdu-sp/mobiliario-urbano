@@ -48,7 +48,6 @@ export const columns: ColumnDef<Usuario>[] = [
 		accessorKey: 'actions',
 		header: () => <p className='text-center'></p>,
 		cell: ({ row }) => {
-			const status = row.original.status;
 			return (
 				<div className='flex items-center justify-center'>
 					<ModalUsuario usuario={row.original}>

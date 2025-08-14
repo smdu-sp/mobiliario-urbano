@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { validaSenha, verificarPermissoes } from "@/services/usuarios";
+import { verificarPermissoes } from "@/services/usuarios";
 import { redirect } from "next/navigation";
 
 export default async function AuthLayout({

@@ -5,7 +5,6 @@ import { criarPreCadastro } from "@/services/cadastros";
 import { NextRequest, NextResponse } from "next/server";
 import { transporter } from "@/lib/nodemailer";
 import { templateEmail } from "./_utils/template-email";
-import bcrypt from "bcryptjs";
 
 export interface IParticipante {
     nome: string

@@ -1,8 +1,7 @@
 "use client"
 
-import { Contato, Data, Programacao, Sobre } from "@/components/icones";
+import { Data, Sobre } from "@/components/icones";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export default function Informacoes() {
