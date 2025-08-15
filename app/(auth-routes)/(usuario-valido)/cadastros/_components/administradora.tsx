@@ -11,6 +11,10 @@ import { Button } from '@/components/ui/button';
 
 export const administradoraColumns: ColumnDef<ICadastro>[] = [
 	{
+		accessorKey: 'protocolo',
+		header: 'Protocolo',
+	},
+	{
 		accessorKey: 'nome',
 		header: 'Nome',
 	},
