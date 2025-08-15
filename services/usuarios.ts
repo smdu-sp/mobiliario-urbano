@@ -35,11 +35,16 @@ export async function criarUsuario(dados: ICreateUsuario) {
 			data: { email, nome, permissao, senha: senhaHash, tipo: 'EXTERNO', alterarSenha },
 		});
         if (usuario && enviarEmail) {
-            await transporter.sendMail({
-                to: email,
-                subject: 'Sua senha de acesso ao sistema de licitações',
-                text: `Sua senha de acesso ao sistema de licitações é: ${senha}`,
-            });
+            try {
+                await transporter.sendMail({
+                    from: "vmabreu@prefeitura.sp.gov.br",
+                    to: email,
+                    subject: 'Sua senha de acesso ao sistema de licitações',
+                    text: `Sua senha de acesso ao sistema de licitações é: ${senha}`,
+                });
+            } catch (error) {
+                console.error(error);
+            }
         }
         if (!usuario) return null;
 		return usuario;

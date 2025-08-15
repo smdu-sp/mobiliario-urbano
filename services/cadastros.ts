@@ -74,6 +74,7 @@ async function buscarCadastros(
   [pagina, limite] = verificaPagina(pagina, limite);
   const select = ["ADMIN", "DEV"].includes(permissao) ? {
     id: true,
+    protocolo: true,
     email: true,
     nome: true,
     cnpj: true,
