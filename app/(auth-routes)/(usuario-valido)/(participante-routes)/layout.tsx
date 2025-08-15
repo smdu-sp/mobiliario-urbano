@@ -11,5 +11,7 @@ export default async function AuthLayout({
   if (!session) redirect("/");
   const validacao = await verificarPermissoes(session.user.id, ['PARTICIPANTE']);
   if (!validacao) redirect("/");
-  return children;
+  return <div className="h-full">
+    {children}
+  </div>
 }

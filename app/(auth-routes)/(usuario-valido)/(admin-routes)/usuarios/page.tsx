@@ -7,7 +7,9 @@ import { Suspense } from 'react';
 import { columns } from './_components/columns';
 import { Usuario } from '.prisma/client';
 import ModalUsuario from './_components/modal_usuario';
-import { buscarUsuarios } from '@/services/usuarios';
+import { buscarUsuarios, retornaPermissao } from '@/services/usuarios';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
 export default async function UsuariosSuspense({
 	searchParams,
@@ -33,8 +35,12 @@ async function Usuarios({
 }: {
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+	const session = await auth();
+	if (!session || !session.user) redirect("/");
 	let { pagina = 1, limite = 10, total = 0 } = await searchParams;
 	const { busca = '' } = await searchParams;
+	const permissao = await retornaPermissao(session.user.id);
+	if (!permissao) redirect("/");
 	let dados: Usuario[] = [];
 	try {
         const data = await buscarUsuarios(
@@ -81,7 +87,7 @@ async function Usuarios({
 					/>
 				)}
 				<div className='absolute bottom-4 right-4'>
-					<ModalUsuario />
+					<ModalUsuario permissao={permissao} />
 				</div>
 			</div>
 		</div>

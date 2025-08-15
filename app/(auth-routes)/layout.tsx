@@ -10,7 +10,7 @@ export default async function AuthLayout({
 }) {
   const session = await auth();
   if (!session) {
-    redirect("/");
+    redirect("/auth/login");
   }
   return <div className="flex flex-col w-full h-screen bg-[#e9edde]">
     <Navbar />

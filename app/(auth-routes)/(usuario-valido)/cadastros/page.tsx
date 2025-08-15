@@ -66,7 +66,7 @@ async function Usuarios({
     const session = await auth();
     if (!session) return redirect('/');
     if (!await verificarPermissoes(session.user.id, ["ADMIN", "DEV", "LICITACAO", "JULGADORA"]))
-        return redirect('/');
+        return redirect('/meu-cadastro');
     const permissao: Permissao | null = await retornaPermissao(session.user.id);
     if (!permissao) return redirect('/');
 	let { pagina = 1, limite = 10, total = 0 } = await searchParams;

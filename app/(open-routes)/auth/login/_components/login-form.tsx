@@ -32,7 +32,7 @@ export function LoginForm({
 			if (res.error) toast.error('Credenciais incorretas!');
 			else {
 				toast.success('Seja bem-vindo!');
-				router.push('/');
+				router.push('/cadastros');
 			}
 		} catch (error) {
 			console.log(error);

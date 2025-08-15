@@ -35,16 +35,18 @@ async function criarPreCadastro(
       const novo_cadastro = await tx.cadastro.create({ data: { ...data, usuarioId: novo_usuario.id } });
       try {
         if (preCadastro.equipe && participantes && participantes.length > 0)
-          console.log(
-            await tx.participante.createMany({
-              data: participantes.map((participante) => ({
-                ...participante,
-                cadastroId: novo_cadastro.id,
-              })),
-            })
-          );
-
-        return novo_cadastro;
+          await tx.participante.createMany({
+            data: participantes.map((participante) => ({
+              ...participante,
+              cadastroId: novo_cadastro.id,
+            })),
+          })
+        const protocolo = geraProtocolo(novo_cadastro.id);
+        const cadastro_protocolo = await tx.cadastro.update({
+          where: { id: novo_cadastro.id },
+          data: { protocolo }
+        });
+        return cadastro_protocolo;
       } catch (error) {
         tx.cadastro.delete({ where: { id: novo_cadastro.id } });
         tx.usuario.delete({ where: { id: novo_usuario.id } });

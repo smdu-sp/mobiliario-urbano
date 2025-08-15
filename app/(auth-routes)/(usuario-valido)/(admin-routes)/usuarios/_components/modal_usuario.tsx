@@ -21,7 +21,7 @@ const schemaUsuario = z.object({
     tipo: z.enum(Tipo_Usuario).default(Tipo_Usuario.INTERNO)
 });
 
-export default function ModalUsuario({ usuario, children }: { usuario?: Usuario, children?: React.ReactNode }) {
+export default function ModalUsuario({ permissao, usuario, children }: { permissao: Permissao, usuario?: Usuario, children?: React.ReactNode }) {
     const [open, setOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const formUsuario = useForm<z.input<typeof schemaUsuario>>({
@@ -183,9 +183,9 @@ export default function ModalUsuario({ usuario, children }: { usuario?: Usuario,
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
+                                                {permissao === "DEV" && <SelectItem value={Permissao.DEV}>Desenvolvedor</SelectItem>}
+                                                <SelectItem value={Permissao.ADMIN}>Comissão organizadora</SelectItem>
                                                 <SelectItem value={Permissao.JULGADORA}>Comissão julgadora</SelectItem>
-                                                <SelectItem value={Permissao.LICITACAO}>Comissão licitatória</SelectItem>
-                                                <SelectItem value={Permissao.ADMIN}>Administrador</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
